@@ -35,6 +35,7 @@ class MockbusterRental(models.Model):
         required=True,
         tracking=True,
     )
+    
     date_returned = fields.Date(readonly=True, copy=False)
     state = fields.Selection(
         [("draft", "Draft"), ("ongoing", "Ongoing"), ("returned", "Returned")],

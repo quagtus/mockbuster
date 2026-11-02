@@ -16,7 +16,7 @@ update:      ## upgrade module after Python/data changes
 test:        ## fresh throwaway DB, run module tests
 	docker compose run --rm odoo odoo -d $(ODOO_DB)_test -i mockbuster \
 		--test-tags /mockbuster --stop-after-init --log-level=test
-	docker compose run --rm odoo dropdb -h db -U $(POSTGRES_USER) --if-exists $(ODOO_DB)_test
+	@docker compose run --rm -e PGPASSWORD=$(POSTGRES_PASSWORD) odoo dropdb -h db -U $(POSTGRES_USER) --if-exists $(ODOO_DB)_test
 
 logs:
 	docker compose logs -f odoo

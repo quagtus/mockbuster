@@ -1,0 +1,35 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  odoo-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env from example
+        run: cp .env.example .env
+
+      - name: Start PostgreSQL
+        run: docker compose up -d --wait db
+
+      - name: Install module and run tests
+        run: |
+          set -o pipefail
+          docker compose run --rm -T odoo odoo -d mockbuster_test -i mockbuster \
+            --test-tags /mockbuster --stop-after-init --log-level=test 2>&1 | tee odoo-test.log
+          if grep -E "(ERROR|CRITICAL) mockbuster_test|FAIL:" odoo-test.log; then
+            echo "Test failures found"; exit 1
+          fi
+
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odoo-test-log
+          path: odoo-test.log
