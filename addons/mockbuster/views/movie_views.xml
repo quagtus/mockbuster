@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mockbuster_movie_tree" model="ir.ui.view">
+        <field name="name">mockbuster.movie.tree</field>
+        <field name="model">mockbuster.movie</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="title" />
+                <field name="year" />
+                <field name="genre" />
+                <field name="actor_ids" widget="many2many_tags" optional="show" />
+                <field name="copy_count" />
+                <field name="available_count"
+                    decoration-danger="available_count == 0"
+                    decoration-success="available_count > 0" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_movie_form" model="ir.ui.view">
+        <field name="name">mockbuster.movie.form</field>
+        <field name="model">mockbuster.movie</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_rentals" type="object"
+                            class="oe_stat_button" icon="fa-film">
+                            <field name="rental_count" widget="statinfo" string="Rentals" />
+                        </button>
+                    </div>
+                    <field name="poster" widget="image" class="oe_avatar" />
+                    <div class="oe_title">
+                        <h1>
+                            <field name="title" placeholder="Movie title" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="year" />
+                            <field name="genre" />
+                            <field name="duration" />
+                        </group>
+                        <group>
+                            <field name="director" />
+                            <field name="copy_count" />
+                            <field name="available_count" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cast" name="cast">
+                            <field name="actor_ids">
+                                <tree>
+                                    <field name="name" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Copies" name="copies">
+                            <field name="dvd_ids">
+                                <tree editable="bottom">
+                                    <field name="barcode" />
+                                    <field name="medium" />
+                                    <field name="state" readonly="1" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_movie_search" model="ir.ui.view">
+        <field name="name">mockbuster.movie.search</field>
+        <field name="model">mockbuster.movie</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="title" />
+                <field name="actor_ids" string="Actor" />
+                <field name="director" />
+                <filter name="available" string="Available" domain="[('available_count', '>', 0)]" />
+                <filter name="all_out" string="All copies out"
+                    domain="[('available_count', '=', 0)]" />
+                <group expand="0" string="Group By">
+                    <filter name="group_genre" string="Genre" context="{'group_by': 'genre'}" />
+                    <filter name="group_year" string="Year" context="{'group_by': 'year'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mockbuster_movie" model="ir.actions.act_window">
+        <field name="name">Movies</field>
+        <field name="res_model">mockbuster.movie</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first movie</p>
+        </field>
+    </record>
+</odoo>

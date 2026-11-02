@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mockbuster_dvd_tree" model="ir.ui.view">
+        <field name="name">mockbuster.dvd.tree</field>
+        <field name="model">mockbuster.dvd</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="barcode" />
+                <field name="movie_id" />
+                <field name="medium" />
+                <field name="state" widget="badge"
+                    decoration-success="state == 'available'"
+                    decoration-warning="state == 'rented'"
+                    decoration-danger="state == 'lost'" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_dvd_form" model="ir.ui.view">
+        <field name="name">mockbuster.dvd.form</field>
+        <field name="model">mockbuster.dvd</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="barcode" />
+                        <field name="movie_id" />
+                        <field name="medium" />
+                        <field name="state" />
+                    </group>
+                    <field name="rental_ids" readonly="1">
+                        <tree>
+                            <field name="name" />
+                            <field name="partner_id" />
+                            <field name="date_start" />
+                            <field name="state" />
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_dvd_search" model="ir.ui.view">
+        <field name="name">mockbuster.dvd.search</field>
+        <field name="model">mockbuster.dvd</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="barcode" />
+                <field name="movie_id" />
+                <filter name="available" string="Available" domain="[('state', '=', 'available')]" />
+                <filter name="rented" string="Rented" domain="[('state', '=', 'rented')]" />
+                <group expand="0" string="Group By">
+                    <filter name="group_movie" string="Movie" context="{'group_by': 'movie_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mockbuster_dvd" model="ir.actions.act_window">
+        <field name="name">Copies</field>
+        <field name="res_model">mockbuster.dvd</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

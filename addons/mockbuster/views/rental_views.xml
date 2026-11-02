@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mockbuster_rental_tree" model="ir.ui.view">
+        <field name="name">mockbuster.rental.tree</field>
+        <field name="model">mockbuster.rental</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="is_overdue" decoration-muted="state == 'returned'">
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="movie_id" />
+                <field name="dvd_id" />
+                <field name="date_start" />
+                <field name="date_due" />
+                <field name="is_overdue" column_invisible="1" />
+                <field name="state" widget="badge"
+                    decoration-info="state == 'ongoing'"
+                    decoration-success="state == 'returned'" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_rental_form" model="ir.ui.view">
+        <field name="name">mockbuster.rental.form</field>
+        <field name="model">mockbuster.rental</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Hand out"
+                        class="btn-primary" invisible="state != 'draft'" />
+                    <button name="action_return" type="object" string="Mark returned"
+                        class="btn-primary" invisible="state != 'ongoing'" />
+                    <button name="%(action_report_rental)d" type="action"
+                        string="Print receipt" invisible="state == 'draft'" />
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,ongoing,returned" />
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Overdue" bg_color="text-bg-danger"
+                        invisible="not is_overdue" />
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="state != 'draft'" />
+                            <field name="dvd_id" readonly="state != 'draft'" />
+                            <field name="movie_id" />
+                        </group>
+                        <group>
+                            <field name="date_start" readonly="state != 'draft'" />
+                            <field name="rental_days" readonly="state != 'draft'" />
+                            <field name="date_due" />
+                            <field name="date_returned" invisible="not date_returned" />
+                            <field name="is_overdue" invisible="1" />
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_rental_search" model="ir.ui.view">
+        <field name="name">mockbuster.rental.search</field>
+        <field name="model">mockbuster.rental</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="movie_id" />
+                <filter name="ongoing" string="Ongoing" domain="[('state', '=', 'ongoing')]" />
+                <filter name="overdue" string="Overdue" domain="[('is_overdue', '=', True)]" />
+                <filter name="returned" string="Returned" domain="[('state', '=', 'returned')]" />
+                <group expand="0" string="Group By">
+                    <filter name="group_movie" string="Movie" context="{'group_by': 'movie_id'}" />
+                    <filter name="group_customer" string="Customer"
+                        context="{'group_by': 'partner_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mockbuster_rental" model="ir.actions.act_window">
+        <field name="name">Rentals</field>
+        <field name="res_model">mockbuster.rental</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_ongoing': 1}</field>
+    </record>
+</odoo>

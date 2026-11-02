@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_rental" model="ir.actions.report">
+        <field name="name">Rental receipt</field>
+        <field name="model">mockbuster.rental</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mockbuster.report_rental_document</field>
+        <field name="report_file">mockbuster.report_rental_document</field>
+        <field name="print_report_name">'Rental - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_mockbuster_rental" />
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_movie_ranking" model="ir.actions.report">
+        <field name="name">Popularity ranking</field>
+        <field name="model">mockbuster.movie</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mockbuster.report_movie_ranking</field>
+        <field name="report_file">mockbuster.report_movie_ranking</field>
+        <field name="binding_model_id" ref="model_mockbuster_movie" />
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

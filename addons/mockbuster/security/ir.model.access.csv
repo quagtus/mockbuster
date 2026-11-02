@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_actor_user,actor user,model_mockbuster_actor,group_mockbuster_user,1,0,0,0
+access_actor_manager,actor manager,model_mockbuster_actor,group_mockbuster_manager,1,1,1,1
+access_movie_user,movie user,model_mockbuster_movie,group_mockbuster_user,1,0,0,0
+access_movie_manager,movie manager,model_mockbuster_movie,group_mockbuster_manager,1,1,1,1
+access_dvd_user,dvd user,model_mockbuster_dvd,group_mockbuster_user,1,1,0,0
+access_dvd_manager,dvd manager,model_mockbuster_dvd,group_mockbuster_manager,1,1,1,1
+access_rental_user,rental user,model_mockbuster_rental,group_mockbuster_user,1,1,1,0
+access_rental_manager,rental manager,model_mockbuster_rental,group_mockbuster_manager,1,1,1,1
+access_rental_report_manager,rental report manager,model_mockbuster_rental_report,group_mockbuster_manager,1,0,0,0

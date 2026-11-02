@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_rental_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Rental <span t-field="o.name" /></h2>
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Customer</strong>
+                                <div t-field="o.partner_id"
+                                    t-options='{"widget": "contact", "fields": ["name", "address", "email", "phone"], "no_marker": true}' />
+                            </div>
+                            <div class="col-6">
+                                <p class="mb-1">
+                                    <strong>Rented on:</strong>
+                                    <span t-field="o.date_start" />
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Due back:</strong>
+                                    <span t-field="o.date_due" />
+                                </p>
+                                <p t-if="o.date_returned" class="mb-1">
+                                    <strong>Returned:</strong>
+                                    <span t-field="o.date_returned" />
+                                </p>
+                            </div>
+                        </div>
+                        <table class="table table-sm mt-4">
+                            <thead>
+                                <tr>
+                                    <th>Movie</th>
+                                    <th>Year</th>
+                                    <th>Copy</th>
+                                    <th>Medium</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.movie_id.title" />
+                                    </td>
+                                    <td>
+                                        <span t-out="o.movie_id.year" />
+                                    </td>
+                                    <td>
+                                        <span t-field="o.dvd_id.barcode" />
+                                    </td>
+                                    <td>
+                                        <span t-field="o.dvd_id.medium" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-4 small">
+                            Please return the copy by the due date. Be kind, rewind.
+                        </p>
+                        <div class="row mt-5">
+                            <div class="col-6">________________________<br />Customer signature</div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_movie_ranking">
+        <t t-call="web.html_container">
+            <t t-set="o" t-value="docs[:1]" />
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Most rented movies</h2>
+                    <table class="table table-sm mt-3">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Movie</th>
+                                <th>Genre</th>
+                                <th class="text-end">Rentals</th>
+                                <th class="text-end">Available</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs.sorted('rental_count', reverse=True)" t-as="movie">
+                                <td>
+                                    <span t-out="movie_index + 1" />
+                                </td>
+                                <td>
+                                    <span t-field="movie.title" />
+                                </td>
+                                <td>
+                                    <span t-field="movie.genre" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-out="movie.rental_count" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-out="movie.available_count" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

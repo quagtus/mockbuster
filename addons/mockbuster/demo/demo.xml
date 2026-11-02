@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- actors -->
+  <record id="actor_murray" model="mockbuster.actor">
+    <field name="name">Bill Murray</field>
+  </record>
+  <record id="actor_macdowell" model="mockbuster.actor">
+    <field name="name">Andie MacDowell</field>
+  </record>
+  <record id="actor_reeves" model="mockbuster.actor">
+    <field name="name">Keanu Reeves</field>
+  </record>
+  <record id="actor_moss" model="mockbuster.actor">
+    <field name="name">Carrie-Anne Moss</field>
+  </record>
+
+  <!-- movies -->
+  <record id="movie_groundhog" model="mockbuster.movie">
+    <field name="title">Groundhog Day</field>
+    <field name="year">1993</field>
+    <field name="genre">comedy</field>
+    <field name="director">Harold Ramis</field>
+    <field name="actor_ids" eval="[(6, 0, [ref('actor_murray'), ref('actor_macdowell')])]" />
+  </record>
+  <record id="movie_matrix" model="mockbuster.movie">
+    <field name="title">The Matrix</field>
+    <field name="year">1999</field>
+    <field name="genre">scifi</field>
+    <field name="director">The Wachowskis</field>
+    <field name="actor_ids" eval="[(6, 0, [ref('actor_reeves'), ref('actor_moss')])]" />
+  </record>
+  <record id="movie_ghostbusters" model="mockbuster.movie">
+    <field name="title">Ghostbusters</field>
+    <field name="year">1984</field>
+    <field name="genre">comedy</field>
+    <field name="director">Ivan Reitman</field>
+    <field name="actor_ids" eval="[(6, 0, [ref('actor_murray')])]" />
+  </record>
+
+  <!-- copies -->
+  <record id="dvd_gd_1" model="mockbuster.dvd">
+    <field name="barcode">GD-001</field>
+    <field name="movie_id" ref="movie_groundhog" />
+  </record>
+  <record id="dvd_gd_2" model="mockbuster.dvd">
+    <field name="barcode">GD-002</field>
+    <field name="movie_id" ref="movie_groundhog" />
+  </record>
+  <record id="dvd_mx_1" model="mockbuster.dvd">
+    <field name="barcode">MX-001</field>
+    <field name="movie_id" ref="movie_matrix" />
+    <field name="medium">vhs</field>
+    <field name="state">rented</field>
+  </record>
+  <record id="dvd_gb_1" model="mockbuster.dvd">
+    <field name="barcode">GB-001</field>
+    <field name="movie_id" ref="movie_ghostbusters" />
+  </record>
+
+  <!-- customer -->
+  <record id="partner_marty" model="res.partner">
+    <field name="name">Marty McFly</field>
+    <field name="email">marty@example.com</field>
+  </record>
+
+  <!-- rentals: one overdue, two returned (for the popularity report) -->
+  <record id="rental_overdue" model="mockbuster.rental">
+    <field name="partner_id" ref="partner_marty" />
+    <field name="dvd_id" ref="dvd_mx_1" />
+    <field name="date_start" eval="(DateTime.today() - relativedelta(days=12)).strftime('%Y-%m-%d')" />
+    <field name="state">ongoing</field>
+  </record>
+  <record id="rental_returned_1" model="mockbuster.rental">
+    <field name="partner_id" ref="partner_marty" />
+    <field name="dvd_id" ref="dvd_gd_1" />
+    <field name="date_start" eval="(DateTime.today() - relativedelta(days=40)).strftime('%Y-%m-%d')" />
+    <field name="date_returned"
+      eval="(DateTime.today() - relativedelta(days=35)).strftime('%Y-%m-%d')" />
+    <field name="state">returned</field>
+  </record>
+  <record id="rental_returned_2" model="mockbuster.rental">
+    <field name="partner_id" ref="partner_marty" />
+    <field name="dvd_id" ref="dvd_gd_2" />
+    <field name="date_start" eval="(DateTime.today() - relativedelta(days=20)).strftime('%Y-%m-%d')" />
+    <field name="date_returned"
+      eval="(DateTime.today() - relativedelta(days=16)).strftime('%Y-%m-%d')" />
+    <field name="state">returned</field>
+  </record>
+</odoo>

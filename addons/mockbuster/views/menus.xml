@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mockbuster_root" name="Mockbuster" sequence="10"
+        groups="group_mockbuster_user" />
+
+    <menuitem id="menu_mockbuster_rentals" name="Rentals" sequence="10"
+        parent="menu_mockbuster_root" action="action_mockbuster_rental" />
+
+    <menuitem id="menu_mockbuster_catalog" name="Catalog" sequence="20"
+        parent="menu_mockbuster_root" />
+    <menuitem id="menu_mockbuster_movies" name="Movies" sequence="10"
+        parent="menu_mockbuster_catalog" action="action_mockbuster_movie" />
+    <menuitem id="menu_mockbuster_actors" name="Actors" sequence="20"
+        parent="menu_mockbuster_catalog" action="action_mockbuster_actor" />
+    <menuitem id="menu_mockbuster_copies" name="Copies" sequence="30"
+        parent="menu_mockbuster_catalog" action="action_mockbuster_dvd" />
+
+    <menuitem id="menu_mockbuster_reporting" name="Reporting" sequence="30"
+        parent="menu_mockbuster_root" groups="group_mockbuster_manager" />
+    <menuitem id="menu_mockbuster_rental_analysis" name="Popular movies" sequence="10"
+        parent="menu_mockbuster_reporting" action="action_mockbuster_rental_report" />
+</odoo>

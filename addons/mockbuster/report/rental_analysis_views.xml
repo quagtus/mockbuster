@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mockbuster_rental_report_graph" model="ir.ui.view">
+        <field name="name">mockbuster.rental.report.graph</field>
+        <field name="model">mockbuster.rental.report</field>
+        <field name="arch" type="xml">
+            <graph string="Popular movies" type="bar" order="desc" sample="1">
+                <field name="movie_id" />
+                <field name="rental_count" type="measure" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_rental_report_pivot" model="ir.ui.view">
+        <field name="name">mockbuster.rental.report.pivot</field>
+        <field name="model">mockbuster.rental.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Rental analysis" sample="1">
+                <field name="movie_id" type="row" />
+                <field name="date_start" interval="month" type="col" />
+                <field name="rental_count" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_mockbuster_rental_report_search" model="ir.ui.view">
+        <field name="name">mockbuster.rental.report.search</field>
+        <field name="model">mockbuster.rental.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="movie_id" />
+                <field name="partner_id" />
+                <filter name="last_90_days" string="Last 90 days"
+                    domain="[('date_start', '>=', (context_today() - relativedelta(days=90)).strftime('%Y-%m-%d'))]" />
+                <filter name="date_start" string="Rented on" date="date_start" />
+                <group expand="0" string="Group By">
+                    <filter name="group_movie" string="Movie" context="{'group_by': 'movie_id'}" />
+                    <filter name="group_genre" string="Genre" context="{'group_by': 'genre'}" />
+                    <filter name="group_customer" string="Customer"
+                        context="{'group_by': 'partner_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mockbuster_rental_report" model="ir.actions.act_window">
+        <field name="name">Popular movies</field>
+        <field name="res_model">mockbuster.rental.report</field>
+        <field name="view_mode">graph,pivot</field>
+    </record>
+</odoo>
